@@ -45,3 +45,9 @@ A lot
 - Hough parameters are considered static here, my guess would be if there was a mechanism to detect the right hough parameters for each frame it would be nice.
 - Again, the region of interest vertices is considered static, this may very well fail to detect only the lanes if the video starts to move and the optial ROI changes. A mechanism to detect waht are the optimal vertices for the ROI would be great, IMO.
 - I would explore or research for a better way to traverse over each point of each detected line as it the time complexity for this brute force approach may very well be not performant in production.
+
+References:
+
+[KDNuggets](https://www.kdnuggets.com/2017/07/road-lane-line-detection-using-computer-vision-models.html/2)
+
+[Udacity Knowledge base](https://knowledge.udacity.com/questions/636869)
