@@ -45,4 +45,3 @@ def detectLineLanes(image):
     )
     weighted = helpers.weighted_img(line_image, image)
     return weighted
-

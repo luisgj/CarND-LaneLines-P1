@@ -81,22 +81,26 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=10):
                 right_y += [y1, y2]
                 right_x += [x1, x2]
                 
-    # So based on this question
-    # I must take the mean value for all the parameters and values
-    # m, x, y and b
-    # https://knowledge.udacity.com/questions/636869
-    left_mean_slope = np.mean(left_slope)
-    left_y_mean = np.mean(left_y)
-    left_x_mean = np.mean(left_x)
-    left_intercept = left_y_mean - (left_mean_slope * left_x_mean)
+    # It seems that in the second video some images don't detect lines
+    # for some reason :( this statement fixes that particular issue by
+    # validating that there are valid lines detected.
+    if(len(right_slope) > 0 and len(left_slope) > 0):
+        # So based on this question
+        # I must take the mean value for all the parameters and values
+        # m, x, y and b for each lane side.
+        # https://knowledge.udacity.com/questions/636869
+        left_mean_slope = np.mean(left_slope, axis=0)
+        left_y_mean = np.mean(left_y, axis=0)
+        left_x_mean = np.mean(left_x, axis=0)
+        # b = y - mx
+        left_intercept = left_y_mean - (left_mean_slope * left_x_mean)
 
-    right_mean_slope = np.mean(right_slope)
-    right_y_mean = np.mean(right_y)
-    right_x_mean = np.mean(right_x)
-    right_intercept = right_y_mean - (right_mean_slope * right_x_mean)
-    
-    if ((len(left_slope) > 0) and (len(right_slope) > 0)):
-        # Get remaining line x coordinates on the mean values:
+        right_mean_slope = np.mean(right_slope, axis=0)
+        right_y_mean = np.mean(right_y, axis=0)
+        right_x_mean = np.mean(right_x, axis=0)
+        # b = y - mx
+        right_intercept = right_y_mean - (right_mean_slope * right_x_mean)
+
         # if    y = mx + b, 
         # then  x = (y - b)/m
         top_left_x = int((ymin_global - left_intercept) / left_mean_slope)
@@ -104,10 +108,20 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=10):
         top_right_x = int((ymin_global - right_intercept) / right_mean_slope)
         bottom_right_x = int((ymax_global - right_intercept) / right_mean_slope)
 
-        cv2.line(img, (top_left_x, ymin_global), 
-                      (bottom_left_x, ymax_global), color, thickness)
-        cv2.line(img, (top_right_x, ymin_global), 
-                      (bottom_right_x, ymax_global), color, thickness)
+        cv2.line(
+            img,
+            (top_left_x, ymin_global), 
+            (bottom_left_x, ymax_global),
+            color,
+            thickness
+        )
+        cv2.line(
+            img,
+            (top_right_x, ymin_global), 
+            (bottom_right_x, ymax_global),
+            color, 
+            thickness
+        )
     
 def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
     """
